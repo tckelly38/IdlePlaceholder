@@ -3,7 +3,9 @@ var hit_damage = 10
 var hit_rate = 1
 var health = 100
 var speed = 0.25
-var spawnRate = 5
+const spawnRate = 2.0
+var needSpawn = true
+onready var timer = get_node("Timer")
 
 var floating_text = preload("res://FloatingPoint.tscn")
 
@@ -34,12 +36,23 @@ func die():
 	set_process(false)
 	get_tree().queue_delete(self)
 	
-	
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	$AnimationPlayer.play("idle")
+	timer = Timer.new()
+	
+	timer.set_wait_time(spawnRate)
+	timer.set_one_shot(false)
+
+	add_child(timer)
+	timer.start()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_Timer_timeout():
+	needSpawn = true

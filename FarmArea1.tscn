@@ -1,88 +1,8 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://FarmArea1.gd" type="Script" id=1]
 [ext_resource path="res://KinematicBody2D.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Slimes/Slime_Small_Green.png" type="Texture" id=3]
-[ext_resource path="res://enemy.gd" type="Script" id=4]
-
-[sub_resource type="RectangleShape2D" id=5]
-
-[sub_resource type="Animation" id=2]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:frame_coords")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 1, 0 ) ]
-}
-
-[sub_resource type="Animation" id=3]
-resource_name = "attack"
-length = 1.2
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
-}
-
-[sub_resource type="Animation" id=7]
-resource_name = "hit"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ Color( 1, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
-}
-
-[sub_resource type="Animation" id=4]
-resource_name = "idle"
-length = 3.5
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.4, 0.8, 1.2, 1.6, 2, 2.4, 2.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-}
+[ext_resource path="res://enemy.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 10, 298 )
@@ -99,29 +19,7 @@ text = "Go Back"
 position = Vector2( 66, 291 )
 input_pickable = true
 
-[node name="enemy" type="KinematicBody2D" parent="." groups=["enemies", "slimes"]]
-position = Vector2( 882, 87 )
-script = ExtResource( 4 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="enemy"]
-position = Vector2( 2, -5 )
-shape = SubResource( 5 )
-
-[node name="Sprite" type="Sprite" parent="enemy"]
-position = Vector2( 1, 5 )
-scale = Vector2( 2.28986, 2.16667 )
-texture = ExtResource( 3 )
-flip_h = true
-hframes = 2
-vframes = 4
-frame = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="enemy"]
-root_node = NodePath("../Sprite")
-anims/RESET = SubResource( 2 )
-anims/attack = SubResource( 3 )
-anims/hit = SubResource( 7 )
-anims/idle = SubResource( 4 )
+[node name="enemy" parent="." instance=ExtResource( 3 )]
 
 [node name="collision_Wall" type="Area2D" parent="."]
 
@@ -129,5 +27,8 @@ anims/idle = SubResource( 4 )
 position = Vector2( 63, 301 )
 shape = SubResource( 6 )
 
+[node name="SlimeEnemyTimer" type="Timer" parent="."]
+
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
 [connection signal="body_entered" from="collision_Wall" to="player" method="_on_collision_Wall_body_entered"]
+[connection signal="timeout" from="SlimeEnemyTimer" to="." method="_on_SlimeEnemyTimer_timeout"]
