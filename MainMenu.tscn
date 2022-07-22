@@ -1,0 +1,125 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://MainMenu.gd" type="Script" id=1]
+
+[node name="Menu" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -510.0
+margin_top = -297.0
+margin_right = 514.0
+margin_bottom = 303.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Farm" type="VBoxContainer" parent="."]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_top = -37.0
+margin_right = 270.0
+margin_bottom = 37.0
+
+[node name="Farm Area 1" type="Button" parent="Farm"]
+margin_right = 270.0
+margin_bottom = 20.0
+focus_neighbour_left = NodePath("../../Raids/Raid 1")
+focus_neighbour_top = NodePath("../Farm Area 3")
+text = "Farm Area 1"
+
+[node name="Farm Area 2" type="Button" parent="Farm"]
+margin_top = 24.0
+margin_right = 270.0
+margin_bottom = 44.0
+focus_neighbour_left = NodePath("../../Raids/Raid 2")
+text = "Farm Area 2"
+
+[node name="Farm Area 3" type="Button" parent="Farm"]
+margin_top = 48.0
+margin_right = 270.0
+margin_bottom = 68.0
+focus_neighbour_left = NodePath("../../Raids/Raid 3")
+focus_neighbour_bottom = NodePath("../Farm Area 1")
+text = "Farm Area 3"
+
+[node name="Dungeons" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -154.5
+margin_top = -37.0
+margin_right = 154.5
+margin_bottom = 37.0
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Dungeon 1" type="Button" parent="Dungeons"]
+margin_right = 309.0
+margin_bottom = 20.0
+focus_neighbour_top = NodePath("../Dungeon 3")
+text = "Dungeon 1"
+
+[node name="Dungeon 2" type="Button" parent="Dungeons"]
+margin_top = 24.0
+margin_right = 309.0
+margin_bottom = 44.0
+text = "Dungeon 2"
+
+[node name="Dungeon 3" type="Button" parent="Dungeons"]
+margin_top = 48.0
+margin_right = 309.0
+margin_bottom = 68.0
+focus_neighbour_bottom = NodePath("../Dungeon 1")
+text = "Dungeon 3"
+
+[node name="Raids" type="VBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -309.0
+margin_top = -37.0
+margin_bottom = 37.0
+
+[node name="Raid 1" type="Button" parent="Raids"]
+margin_right = 309.0
+margin_bottom = 20.0
+focus_neighbour_top = NodePath("../Raid 3")
+focus_neighbour_right = NodePath("../../Farm/Farm Area 1")
+text = "Raid 1"
+
+[node name="Raid 2" type="Button" parent="Raids"]
+margin_top = 24.0
+margin_right = 309.0
+margin_bottom = 44.0
+focus_neighbour_right = NodePath("../../Farm/Farm Area 2")
+text = "Raid 2"
+
+[node name="Raid 3" type="Button" parent="Raids"]
+margin_top = 48.0
+margin_right = 309.0
+margin_bottom = 68.0
+focus_neighbour_right = NodePath("../../Farm/Farm Area 3")
+focus_neighbour_bottom = NodePath("../Raid 1")
+text = "Raid 3"
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 380.0
+margin_top = 46.0
+margin_right = -382.0
+margin_bottom = -431.0
+text = "Idle Placeholder"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[connection signal="pressed" from="Farm/Farm Area 1" to="." method="_on_Farm_Area_1_pressed"]
