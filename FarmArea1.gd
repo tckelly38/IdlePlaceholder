@@ -9,14 +9,8 @@ func _ready():
 	add_child(timer)
 	timer.start()
 
-	
 func _on_Back_pressed():
 	get_tree().change_scene("res://MainMenu.tscn")
-
-func _process(delta):
-	pass
-
-
 
 func _on_SlimeEnemyTimer_timeout():
 	var player = get_node("player")

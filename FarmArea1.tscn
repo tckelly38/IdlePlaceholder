@@ -21,7 +21,7 @@ input_pickable = true
 
 [node name="enemy" parent="." instance=ExtResource( 3 )]
 
-[node name="collision_Wall" type="Area2D" parent="."]
+[node name="collision_Wall" type="Area2D" parent="." groups=["player_collision_wall"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="collision_Wall"]
 position = Vector2( 63, 301 )

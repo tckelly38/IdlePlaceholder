@@ -312,4 +312,7 @@ anims/idle = SubResource( 4 )
 anims/shoot = SubResource( 7 )
 anims/walk = SubResource( 3 )
 
+[node name="AttackTimer" type="Timer" parent="."]
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]

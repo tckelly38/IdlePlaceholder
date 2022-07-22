@@ -2,25 +2,21 @@ extends KinematicBody2D
 
 var health = 100
 var attack_damage = 10
-var timer = Timer.new()
 const totalCritChance = 100
 var critChance = 75
 var critPercent = 1.5
+var idleAttackRate = 1
+var isDead = false
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-var colliding_enemies = []
-var is_hurt = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	var attack_timer = get_node("AttackTimer")
+	attack_timer.set_wait_time(idleAttackRate)
+	attack_timer.set_one_shot(false)
+	add_child(attack_timer)
+	attack_timer.start()
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 func get_total_attack_dam():
 	randomize()
 	if(randi() % totalCritChance >= critChance):
@@ -36,41 +32,24 @@ func give_damage():
 			best_target = enemy
 		elif (position.x + enemy.position.x) < (position.x + enemy.position.x):
 			best_target = enemy
+	var final_attack = get_total_attack_dam()
 	if is_instance_valid(best_target):
-		var results = get_total_attack_dam()
-		best_target.hit(results[0], results[1])
+		best_target.hit(final_attack[0], final_attack[1])
 		
 func _input(event):
+	if isDead:
+		return
 	if Input.is_action_pressed("my_attack"):
 		give_damage()
-		
 
-func take_damage(enemies):
-	for enemy in enemies: 
-		timer.connect("timeout", self, "get_hit")
-		#TODO: need to make this safer
-		if is_instance_valid(enemy):
-			timer.wait_time = enemy.hit_rate
-			health -= enemy.hit_damage
-		timer.one_shot = true
-		add_child(timer)
-		$AnimationPlayer.play("hit")
-		timer.start()
-		
-
-func get_hit(enemy):
-	pass
+func take_damage(damage):
+	health -= damage
+	$AnimationPlayer.play("hit")
 
 func _physics_process(delta):
-	if(timer.time_left == 0 and colliding_enemies.size() > 0):
-		take_damage(colliding_enemies)
 	if health <= 0:
+		isDead = true
 		$AnimationPlayer.play("death")
-		
-
-func _on_collision_Wall_body_entered(body):
-	colliding_enemies.push_front(body)
-
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "death":
@@ -78,5 +57,7 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 	else:
 		$AnimationPlayer.play("idle")
 
-		
-
+func _on_AttackTimer_timeout():
+	if isDead:
+		return
+	give_damage()

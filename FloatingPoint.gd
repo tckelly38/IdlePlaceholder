@@ -1,10 +1,5 @@
 extends Position2D
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
 onready var label = get_node("Label")
 onready var tween = get_node("Tween")
 var amount = 0
@@ -15,7 +10,6 @@ var type = ""
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	label.set_text(str(amount))
-	
 	match type:
 		"Damage":
 			label.set("custom_colors/font_color", Color('ff6633'))
@@ -32,11 +26,6 @@ func _ready():
 	tween.interpolate_property(self, 'scale', max_size, Vector2(0.1, 0.1), 0.7, Tween.TRANS_LINEAR, Tween.EASE_OUT, 0.3)
 	tween.start()
 	
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
 
 func _on_Tween_tween_all_completed():
 	self.queue_free()
