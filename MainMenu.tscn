@@ -122,4 +122,12 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
+[node name="Save" type="Button" parent="."]
+margin_left = 980.0
+margin_top = -1.0
+margin_right = 1021.0
+margin_bottom = 19.0
+text = "Save"
+
 [connection signal="pressed" from="Farm/Farm Area 1" to="." method="_on_Farm_Area_1_pressed"]
+[connection signal="pressed" from="Save" to="." method="_on_Save_pressed"]

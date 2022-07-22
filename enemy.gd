@@ -3,21 +3,21 @@ extends KinematicBody2D
 var hit_damage = 10
 var hit_rate = 1
 var health = 100
-var speed = 0.01
-const spawnRate = 2.0
+var speed = 0.025
+const spawn_rate = 2.0
 
 signal enemy_attack
 var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
 
-onready var player = get_tree().get_nodes_in_group("player")[0]
 
 func _physics_process(delta):
 	if $Sprite.visible:
-		var direction = (player.get_position().x - position.x)
-		var motion = direction * speed
-		position.x += motion
+		if(position.x > Player.get_position().x):
+			var direction = (-Player.get_position().x)
+			var motion = direction * speed
+			position.x += motion
 		
 func hit(damage, isCrit):
 	health -= damage
@@ -42,13 +42,17 @@ func die():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$AnimationPlayer.play("idle")
-	var attack_timer = get_node("AttackTimer")
-	attack_timer.set_wait_time(hit_rate)
-	attack_timer.set_one_shot(false)
-	add_child(attack_timer)
-	attack_timer.start()
+	timer_setup("AttackTimer", hit_rate)
 	
-	connect("enemy_attack", player, "take_damage")
+	connect("enemy_attack", Player, "take_damage")
+
+	
+func timer_setup(timer_name, wait_time):
+	var timer = get_node(timer_name)
+	timer.set_wait_time(wait_time)
+	timer.set_one_shot(false)
+	add_child(timer)
+	timer.start()
 
 func _on_AttackTimer_timeout():
 	if isInAttackRange:
