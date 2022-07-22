@@ -3,6 +3,10 @@ var hit_damage = 10
 var hit_rate = 1
 var health = 100
 var speed = 0.25
+var spawnRate = 5
+
+var floating_text = preload("res://FloatingPoint.tscn")
+
 onready var player = get_tree().get_nodes_in_group("player")[0]
 
 func _physics_process(delta):
@@ -11,8 +15,15 @@ func _physics_process(delta):
 		var motion = direction * speed * delta
 		position.x += motion
 		
-func hit(damage):
+func hit(damage, isCrit):
 	health -= damage
+	var text = floating_text.instance()
+	text.amount = damage
+	if isCrit:
+		text.type = "Critical"
+	else:
+		text.type = "Damage"
+	add_child(text)
 	if(health <= 0):
 		die()
 	else:

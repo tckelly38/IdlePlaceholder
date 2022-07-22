@@ -3,6 +3,9 @@ extends KinematicBody2D
 var health = 100
 var attack_damage = 10
 var timer = Timer.new()
+const totalCritChance = 100
+var critChance = 75
+var critPercent = 1.5
 
 
 # Declare member variables here. Examples:
@@ -18,19 +21,28 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-
+func get_total_attack_dam():
+	randomize()
+	if(randi() % totalCritChance >= critChance):
+		return [attack_damage * critPercent, true]
+	return [attack_damage, false]
+	
+func give_damage():
+	$AnimationPlayer.play("shoot")
+	var best_target = null
+	for enemy in enemies:
+		if best_target == null:
+			best_target = enemy
+		elif (position.x + enemy.position.x) < (position.x + enemy.position.x):
+			best_target = enemy
+	if is_instance_valid(best_target):
+		var results = get_total_attack_dam()
+		best_target.hit(results[0], results[1])
+		
 func _input(event):
 	if Input.is_action_pressed("my_attack"):
-		$AnimationPlayer.play("shoot")
-		var best_target = null
-		for enemy in enemies:
-			if best_target == null:
-				best_target = enemy
-			elif (position.x + enemy.position.x) < (position.x + enemy.position.x):
-				best_target = enemy
-		if is_instance_valid(best_target):
-			best_target.hit(attack_damage)
-
+		give_damage()
+		
 
 func take_damage(enemies):
 	for enemy in enemies: 

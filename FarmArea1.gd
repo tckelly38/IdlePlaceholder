@@ -12,7 +12,7 @@ extends Node2D
 func _ready():
 	randomize()
 	$enemy/Sprite.visible = false
-	var t = rand_range(1, 4)
+	var t = rand_range(1, $enemy.spawnRate)
 	yield(get_tree().create_timer(t), "timeout")
 	$enemy/Sprite.visible = true
 	$enemy/AnimationPlayer.play("idle")
