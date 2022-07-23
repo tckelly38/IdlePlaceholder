@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://FarmArea1.gd" type="Script" id=1]
+[ext_resource path="res://XPBar.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 10, 298 )
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 1, 1, 1, 1 )
 
 [node name="FarmArea1" type="Node2D"]
 script = ExtResource( 1 )
@@ -20,6 +24,22 @@ position = Vector2( 63, 301 )
 shape = SubResource( 6 )
 
 [node name="SlimeEnemyTimer" type="Timer" parent="."]
+
+[node name="XPBar" type="ProgressBar" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -1.0
+margin_top = 595.0
+margin_right = 1022.0
+margin_bottom = 609.0
+size_flags_horizontal = 3
+custom_styles/fg = SubResource( 7 )
+max_value = 19.0
+step = 1.0
+percent_visible = false
+script = ExtResource( 2 )
 
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
 [connection signal="timeout" from="SlimeEnemyTimer" to="." method="_on_SlimeEnemyTimer_timeout"]

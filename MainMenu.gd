@@ -1,12 +1,11 @@
 extends Control
-var need_load = true
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Player.visible = false
 	$"Farm/Farm Area 1".grab_focus()
-	if need_load:
-		load_game()
+
 
 func _on_Farm_Area_1_pressed():
 	get_tree().change_scene("res://FarmArea1.tscn")
@@ -43,4 +42,9 @@ func load_game():
 		for i in node_data.keys():
 			Player.set(i, node_data[i])
 	save_game.close()
-	need_load = false
+
+
+
+func _on_Load_pressed():
+	load_game()
+	pass # Replace with function body.

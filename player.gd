@@ -11,10 +11,44 @@ var defense = 0.99
 var is_dead = false
 var regen_rate = 1
 var regen_percent = 1.1
-var total_experience = 0
-var xp_level = 0
 
+var level = 0
+var xp_in_current_level = 0
+var experience_total = 0
 
+var experience_requred = get_required_experience(level + 1)
+signal experience_gained
+
+var is_xp_bar_ready = false
+
+func get_required_experience(level):
+	return round(pow(level, 1.75) + level * 8 + 10)
+
+func gain_experience(amount):
+	experience_total += amount
+
+	if experience_total >= experience_requred:
+		level_up()
+
+	emit_signal("experience_gained", experience_total, experience_requred)
+
+func level_up():
+	level += 1
+	experience_requred = get_required_experience(level + 1)
+	current_health = max_health
+	var stats = ['max_health', 'attack', 'crit_chance', 'crit_percent', 'idle_attack_rate', 'defense', 'regen_rate', 'regen_percent']
+	var random_stat = stats[randi() % stats.size()]
+	
+	#set(random_stat, get(random_stat) + randi() % 4 + 2)
+	
+func on_xp_bar_ready(ready):
+	is_xp_bar_ready = ready
+	if(is_xp_bar_ready):
+		var node = get_node("/root/FarmArea1/XPBar")
+		connect("experience_gained", get_node("/root/FarmArea1/XPBar"), "_on_update_xp_bar")
+		emit_signal("experience_gained", experience_total, experience_requred)
+		current_health = max_health
+		
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	timer_setup("AttackTimer", idle_attack_rate)
@@ -52,10 +86,14 @@ func _input(event):
 	if Input.is_action_pressed("my_attack"):
 		give_damage()
 
-func take_damage(damage):
+func on_take_damage(damage):
 	current_health -= damage * defense
 	$AnimationPlayer.play("hit")
 
+func on_enemy_death(xp):
+	gain_experience(xp)
+	
+	
 func _physics_process(delta):
 	if current_health <= 0:
 		is_dead = true
@@ -80,8 +118,9 @@ func save():
 		"max_health": max_health,
 		"regen_rate": regen_rate,
 		"regen_percent": regen_percent,
-		"total_experience": total_experience,
-		"xp_level": xp_level,
+		"experience_total": experience_total,
+		"experience_required": experience_requred,
+		"level": level,
 		"total_crit_chance": total_crit_chance,
 		"crit_chance": crit_chance,
 		"crit_percent": crit_percent

@@ -5,8 +5,9 @@ var hit_rate = 1
 var health = 100
 var speed = 0.025
 const spawn_rate = 2.0
-
+var xp_grant = 1
 signal enemy_attack
+signal enemy_death
 var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
@@ -34,6 +35,7 @@ func hit(damage, isCrit):
 		$AnimationPlayer.play("hit")
 		
 func die():
+	emit_signal("enemy_death", xp_grant)
 	# disable to prevent regen (_process func)
 	set_process(false)
 	get_tree().queue_delete(self)
@@ -44,7 +46,8 @@ func _ready():
 	$AnimationPlayer.play("idle")
 	timer_setup("AttackTimer", hit_rate)
 	
-	connect("enemy_attack", Player, "take_damage")
+	connect("enemy_attack", Player, "on_take_damage")
+	connect("enemy_death", Player, "on_enemy_death")
 
 	
 func timer_setup(timer_name, wait_time):
