@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 const Enemy = preload("res://enemy.tscn")
 # Called when the node enters the scene tree for the first time.

@@ -3,6 +3,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	get_node("Farm/Farm Area 1").get_font("font", "sci-fi-theme").size = 20
 	Player.visible = false
 	$"Farm/Farm Area 1".grab_focus()
 

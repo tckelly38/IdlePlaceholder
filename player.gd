@@ -18,6 +18,7 @@ var experience_total = 0
 
 var experience_requred = get_required_experience(level + 1)
 signal experience_gained
+signal level_up
 
 var is_xp_bar_ready = false
 
@@ -34,6 +35,7 @@ func gain_experience(amount):
 
 func level_up():
 	level += 1
+	emit_signal("level_up")
 	experience_requred = get_required_experience(level + 1)
 	current_health = max_health
 	var stats = ['max_health', 'attack', 'crit_chance', 'crit_percent', 'idle_attack_rate', 'defense', 'regen_rate', 'regen_percent']
@@ -46,6 +48,7 @@ func on_xp_bar_ready(ready):
 	if(is_xp_bar_ready):
 		var node = get_node("/root/FarmArea1/XPBar")
 		connect("experience_gained", get_node("/root/FarmArea1/XPBar"), "_on_update_xp_bar")
+		connect("level_up", get_node("/root/FarmArea1/Panel"), "on_level_up")
 		emit_signal("experience_gained", experience_total, experience_requred)
 		current_health = max_health
 		
