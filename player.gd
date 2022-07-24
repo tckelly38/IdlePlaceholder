@@ -4,7 +4,7 @@ var current_health = 100
 var max_health = 100
 var attack = 10
 const total_crit_chance = 100
-var crit_chance = 75
+var crit_chance = 10
 var crit_percent = 1.5
 var idle_attack_rate = 1
 var defense = 0.99
@@ -15,6 +15,7 @@ var regen_percent = 1.1
 var level = 0
 var xp_in_current_level = 0
 var experience_total = 0
+var experience_in_level = 0
 
 var experience_requred = get_required_experience(level + 1)
 signal experience_gained
@@ -27,19 +28,27 @@ func get_required_experience(level):
 
 func gain_experience(amount):
 	experience_total += amount
+	experience_in_level += amount
 
-	if experience_total >= experience_requred:
+	while experience_in_level >= experience_requred:
+		experience_in_level -= experience_requred
 		level_up()
 
-	emit_signal("experience_gained", experience_total, experience_requred)
+	emit_signal("experience_gained", experience_in_level, experience_requred)
 
 func level_up():
 	level += 1
 	emit_signal("level_up")
 	experience_requred = get_required_experience(level + 1)
+	max_health += 10
+	attack += 1
+	crit_chance + 1
+	
+	
 	current_health = max_health
 	var stats = ['max_health', 'attack', 'crit_chance', 'crit_percent', 'idle_attack_rate', 'defense', 'regen_rate', 'regen_percent']
 	var random_stat = stats[randi() % stats.size()]
+	
 	
 	#set(random_stat, get(random_stat) + randi() % 4 + 2)
 	
@@ -48,7 +57,7 @@ func on_xp_bar_ready(ready):
 	if(is_xp_bar_ready):
 		var node = get_node("/root/FarmArea1/XPBar")
 		connect("experience_gained", get_node("/root/FarmArea1/XPBar"), "_on_update_xp_bar")
-		connect("level_up", get_node("/root/FarmArea1/Panel"), "on_level_up")
+		connect("level_up", get_node("/root/FarmArea1/Panel/Position2D"), "on_level_up")
 		emit_signal("experience_gained", experience_total, experience_requred)
 		current_health = max_health
 		
@@ -96,6 +105,9 @@ func on_take_damage(damage):
 func on_enemy_death(xp):
 	gain_experience(xp)
 	
+func on_objective_finished(xp):
+	gain_experience(xp)
+	
 	
 func _physics_process(delta):
 	if current_health <= 0:
@@ -123,6 +135,7 @@ func save():
 		"regen_percent": regen_percent,
 		"experience_total": experience_total,
 		"experience_required": experience_requred,
+		"experience_in_level": experience_in_level,
 		"level": level,
 		"total_crit_chance": total_crit_chance,
 		"crit_chance": crit_chance,

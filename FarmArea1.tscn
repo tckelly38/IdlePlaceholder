@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://FarmArea1.gd" type="Script" id=1]
 [ext_resource path="res://XPBar.gd" type="Script" id=2]
 [ext_resource path="res://sci-fi-godot-theme/sci-fi-theme.tres" type="Theme" id=3]
-[ext_resource path="res://XPPanel.gd" type="Script" id=4]
+[ext_resource path="res://LevelText.gd" type="Script" id=4]
+[ext_resource path="res://ObjectiveContent.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 10, 302.125 )
@@ -45,18 +46,68 @@ script = ExtResource( 2 )
 [node name="Panel" type="Panel" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = -66.0
+margin_top = -71.0
 margin_right = 71.0
 margin_bottom = -5.0
+
+[node name="Position2D" type="Position2D" parent="Panel"]
+position = Vector2( 35, 31 )
 script = ExtResource( 4 )
 
-[node name="XPLabel" type="Label" parent="Panel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="XPLabel" type="Label" parent="Panel/Position2D"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -3.5
+margin_top = -4.5
+margin_right = 3.5
+margin_bottom = 4.5
 theme = ExtResource( 3 )
 text = "8"
 align = 1
 valign = 1
 
+[node name="LabelTween" type="Tween" parent="Panel/Position2D"]
+
+[node name="ObjContainer" type="TabContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -222.0
+margin_top = 1.0
+margin_right = -1.0
+margin_bottom = 99.0
+tab_align = 0
+
+[node name="Obj 1" type="Tabs" parent="ObjContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 15.0
+margin_right = -2.0
+margin_bottom = -2.0
+tab_align = 0
+
+[node name="ObjectiveContent" parent="ObjContainer/Obj 1" instance=ExtResource( 5 )]
+
+[node name="Obj 2" type="Tabs" parent="ObjContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 15.0
+margin_right = -2.0
+margin_bottom = -2.0
+
+[node name="ObjectiveContent" parent="ObjContainer/Obj 2" instance=ExtResource( 5 )]
+
+[node name="Obj 3" type="Tabs" parent="ObjContainer"]
+visible = false
+margin_right = 40.0
+margin_bottom = 19.0
+
+[node name="ObjectiveContent" parent="ObjContainer/Obj 3" instance=ExtResource( 5 )]
+
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
 [connection signal="timeout" from="SlimeEnemyTimer" to="." method="_on_SlimeEnemyTimer_timeout"]
+[connection signal="tween_all_completed" from="Panel/Position2D/LabelTween" to="Panel" method="_on_LabelTween_tween_all_completed"]

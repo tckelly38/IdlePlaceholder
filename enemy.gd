@@ -8,6 +8,7 @@ const spawn_rate = 2.0
 var xp_grant = 1
 signal enemy_attack
 signal enemy_death
+
 var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
@@ -49,6 +50,10 @@ func _ready():
 	connect("enemy_attack", Player, "on_take_damage")
 	connect("enemy_death", Player, "on_enemy_death")
 
+	
+	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 1/ObjectiveContent"), "on_enemy_death")
+	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 2/ObjectiveContent"), "on_enemy_death")
+	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 3/ObjectiveContent"), "on_enemy_death")
 	
 func timer_setup(timer_name, wait_time):
 	var timer = get_node(timer_name)
