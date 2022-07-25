@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://FarmArea1.gd" type="Script" id=1]
 [ext_resource path="res://XPBar.gd" type="Script" id=2]
 [ext_resource path="res://sci-fi-godot-theme/sci-fi-theme.tres" type="Theme" id=3]
 [ext_resource path="res://LevelText.gd" type="Script" id=4]
 [ext_resource path="res://ObjectiveContent.tscn" type="PackedScene" id=5]
+[ext_resource path="res://HealthBar.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 10, 302.125 )
@@ -73,10 +74,9 @@ valign = 1
 [node name="ObjContainer" type="TabContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -222.0
-margin_top = 1.0
-margin_right = -1.0
-margin_bottom = 99.0
+margin_left = -221.0
+margin_top = 2.0
+margin_bottom = 100.0
 tab_align = 0
 
 [node name="Obj 1" type="Tabs" parent="ObjContainer"]
@@ -107,6 +107,9 @@ margin_right = 40.0
 margin_bottom = 19.0
 
 [node name="ObjectiveContent" parent="ObjContainer/Obj 3" instance=ExtResource( 5 )]
+
+[node name="HealthBarPosition" parent="." instance=ExtResource( 6 )]
+position = Vector2( 521, -11 )
 
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
 [connection signal="timeout" from="SlimeEnemyTimer" to="." method="_on_SlimeEnemyTimer_timeout"]

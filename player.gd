@@ -6,7 +6,7 @@ var attack = 10
 const total_crit_chance = 100
 var crit_chance = 10
 var crit_percent = 1.5
-var idle_attack_rate = 1
+var idle_attack_rate = 3
 var defense = 0.99
 var is_dead = false
 var regen_rate = 1
@@ -20,6 +20,7 @@ var experience_in_level = 0
 var experience_requred = get_required_experience(level + 1)
 signal experience_gained
 signal level_up
+signal update_health
 
 var is_xp_bar_ready = false
 
@@ -46,6 +47,7 @@ func level_up():
 	
 	
 	current_health = max_health
+	emit_signal("update_health", current_health, max_health)
 	var stats = ['max_health', 'attack', 'crit_chance', 'crit_percent', 'idle_attack_rate', 'defense', 'regen_rate', 'regen_percent']
 	var random_stat = stats[randi() % stats.size()]
 	
@@ -75,7 +77,7 @@ func timer_setup(timer_name, wait_time):
 	
 func get_total_attack_dam():
 	randomize()
-	if(randi() % total_crit_chance >= crit_chance):
+	if(randi() % total_crit_chance + 1 <= crit_chance):
 		return [attack * crit_percent, true]
 	return [attack, false]
 	
@@ -101,6 +103,7 @@ func _input(event):
 func on_take_damage(damage):
 	current_health -= damage * defense
 	$AnimationPlayer.play("hit")
+	emit_signal("update_health", current_health, max_health)
 
 func on_enemy_death(xp):
 	gain_experience(xp)
@@ -108,11 +111,11 @@ func on_enemy_death(xp):
 func on_objective_finished(xp):
 	gain_experience(xp)
 	
-	
 func _physics_process(delta):
 	if current_health <= 0:
 		is_dead = true
 		$AnimationPlayer.play("death")
+		yield($AnimationPlayer, "finshed")
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "death":
@@ -145,6 +148,8 @@ func save():
 
 
 func _on_RegenTimer_timeout():
-	if !is_dead:
+	if !is_dead and current_health < max_health:
 		current_health = min(current_health * regen_percent, max_health)
+		emit_signal("update_health", current_health, max_health)
+		
 
