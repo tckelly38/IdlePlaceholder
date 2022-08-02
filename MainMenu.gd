@@ -12,7 +12,9 @@ func _ready():
 
 
 func _on_Farm_Area_1_pressed():
-	get_tree().change_scene("res://FarmArea1.tscn")
+	var error_code = get_tree().change_scene("res://FarmArea1.tscn")
+	if error_code:
+		print("Error: no farm area1 exists")
 
 
 func _on_Save_pressed():

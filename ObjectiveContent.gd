@@ -28,11 +28,18 @@ func pick_objective():
 	match obj_prefix:
 		"Kill":
 			receive_signal = "on_enemy_death"
-	
+				
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	connect("objective_finished", Player, "on_objective_finished")
-
+	var error_code = connect("objective_finished", Player, "on_objective_finished")
+	if error_code:
+		print("Error: unable to connect to Player.on_objective_finished from ObjectiveContainer")
+	
+	error_code = get_parent().get_parent().connect("update_content", self, "on_update_content")
+	if error_code:
+		print("Error: Unablne to connect parent container to objectivecontent")
+		
+	get_parent().get_parent().get_parent().connect("enemy_spawned", self, "setup_signal")
 	pick_objective()
 	objective_label.text = current_objective
 	objective_progress_bar.max_value = target_goal
@@ -57,12 +64,11 @@ func goal_achieved():
 
 	yield(tween, "tween_completed")
 
-	
 	#update ui elements and get new objective
 	current_value = 0
 	
-	
 	# emit signal to player to notify
+	
 func update_values():
 	current_value += 1
 	objective_progress_bar.visible = true
@@ -70,22 +76,15 @@ func update_values():
 	objective_progress_bar.max_value = target_goal
 	objective_progress_bar.value = current_value
 	
-func on_enemy_death(xp):
+func on_update_content(): 
 	# need to wait until we can get another objective displayed
 	if processing_objective_achieved:
 		return
 	
-	if(receive_signal != "on_enemy_death"):
-		return
+#	if(receive_signal != "on_enemy_death"):
+#		return
 	
 	update_values()
 	
 	if current_value >= target_goal:
 		goal_achieved()
-	
-
-	
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

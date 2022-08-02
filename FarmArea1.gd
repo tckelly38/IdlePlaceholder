@@ -1,7 +1,8 @@
 extends Control
 
 const Enemy = preload("res://enemy.tscn")
-# Called when the node enters the scene tree for the first time.
+const ObjectiveContainer = preload("res://ObjContainer.gd")
+signal enemy_spawned
 
 func _ready():
 	Player.visible = true
@@ -9,16 +10,18 @@ func _ready():
 	var e = Enemy.instance()
 	timer.set_wait_time(e.spawn_rate)
 	timer.set_one_shot(false)
-	add_child(timer)
 	timer.start()
 
 func _on_Back_pressed():
-	get_tree().change_scene("res://MainMenu.tscn")
+	var error_code = get_tree().change_scene("res://MainMenu.tscn")
+	if error_code:
+		print("Error: unable to locate MainMenu")
 
 func spawn_enemy(pos):
 	var e = Enemy.instance()
 	e.position = pos
 	add_child(e)
+	emit_signal("enemy_spawned")
 
 func _on_spawn_enemy(pos):
 	spawn_enemy(pos)

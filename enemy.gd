@@ -14,7 +14,7 @@ var isInAttackRange= false
 var floating_text = preload("res://FloatingPoint.tscn")
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if $Sprite.visible:
 		if(position.x > Player.get_position().x):
 			var direction = (-Player.get_position().x)
@@ -47,13 +47,21 @@ func _ready():
 	$AnimationPlayer.play("idle")
 	timer_setup("AttackTimer", hit_rate)
 	
-	connect("enemy_attack", Player, "on_take_damage")
-	connect("enemy_death", Player, "on_enemy_death")
-
+	var error_code = connect("enemy_attack", Player, "on_take_damage")
+	if error_code:
+		print("Error: error unable to connect to Player.on_take_damage from enemy")
 	
-	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 1/ObjectiveContent"), "on_enemy_death")
-	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 2/ObjectiveContent"), "on_enemy_death")
-	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 3/ObjectiveContent"), "on_enemy_death")
+	error_code = connect("enemy_death", Player, "on_enemy_death")
+	if error_code:
+		print("Error: error unable to connect to Player.on_enemy_death from enemy")
+
+	var obj = get_node("/root/FarmArea1/ObjContainer")
+	if obj.has_method("on_enemy_death"):
+		error_code = connect("enemy_death", get_node("/root/FarmArea1/ObjContainer"), "on_enemy_death")
+		if error_code:
+			print("Error: error unable to connect to ObjContainer from enemy")
+#	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 2/ObjectiveContent"), "on_enemy_death")
+#	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 3/ObjectiveContent"), "on_enemy_death")
 	
 func timer_setup(timer_name, wait_time):
 	var timer = get_node(timer_name)
@@ -66,7 +74,7 @@ func _on_AttackTimer_timeout():
 	if isInAttackRange:
 		emit_signal("enemy_attack", hit_damage)
 
-func _on_Area2D_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
+func _on_Area2D_area_shape_entered(_area_rid, area, _area_shape_index, _local_shape_index):
 	if area in get_tree().get_nodes_in_group("player_collision_wall"):
 		isInAttackRange = true
 

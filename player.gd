@@ -23,8 +23,8 @@ signal level_up
 
 var is_xp_bar_ready = false
 
-func get_required_experience(level):
-	return round(pow(level, 1.75) + level * 8 + 10)
+func get_required_experience(level_):
+	return round(pow(level_, 1.75) + level_ * 8 + 10)
 
 func gain_experience(amount):
 	experience_total += amount
@@ -42,24 +42,16 @@ func level_up():
 	experience_requred = get_required_experience(level + 1)
 	max_health += 10
 	attack += 1
-	crit_chance + 1
+	crit_chance += 1
 	
 	
 	current_health = max_health
-	var stats = ['max_health', 'attack', 'crit_chance', 'crit_percent', 'idle_attack_rate', 'defense', 'regen_rate', 'regen_percent']
-	var random_stat = stats[randi() % stats.size()]
+	#var stats = ['max_health', 'attack', 'crit_chance', 'crit_percent', 'idle_attack_rate', 'defense', 'regen_rate', 'regen_percent']
+	#var random_stat = stats[randi() % stats.size()]
 	
 	
 	#set(random_stat, get(random_stat) + randi() % 4 + 2)
-	
-func on_xp_bar_ready(ready):
-	is_xp_bar_ready = ready
-	if(is_xp_bar_ready):
-		var node = get_node("/root/FarmArea1/XPBar")
-		connect("experience_gained", get_node("/root/FarmArea1/XPBar"), "_on_update_xp_bar")
-		connect("level_up", get_node("/root/FarmArea1/Panel/Position2D"), "on_level_up")
-		emit_signal("experience_gained", experience_total, experience_requred)
-		current_health = max_health
+
 		
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -70,7 +62,7 @@ func timer_setup(timer_name, wait_time):
 	var timer = get_node(timer_name)
 	timer.set_wait_time(wait_time)
 	timer.set_one_shot(false)
-	add_child(timer)
+	#add_child(timer)
 	timer.start()
 	
 func get_total_attack_dam():
@@ -92,7 +84,7 @@ func give_damage():
 	if is_instance_valid(best_target):
 		best_target.hit(final_attack[0], final_attack[1])
 		
-func _input(event):
+func _input(_event):
 	if is_dead:
 		return
 	if Input.is_action_pressed("my_attack"):
@@ -108,15 +100,16 @@ func on_enemy_death(xp):
 func on_objective_finished(xp):
 	gain_experience(xp)
 	
-	
-func _physics_process(delta):
+func _physics_process(_delta):
 	if current_health <= 0:
 		is_dead = true
 		$AnimationPlayer.play("death")
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "death":
-		get_tree().change_scene("res://MainMenu.tscn")
+		var error_code = get_tree().change_scene("res://MainMenu.tscn")
+		if error_code:
+			print("Error: Fatal, unable to switch to main menu")
 	else:
 		$AnimationPlayer.play("idle")
 
