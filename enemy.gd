@@ -4,7 +4,7 @@ var hit_damage = 10
 var hit_rate = 1
 var health = 100
 var speed = 0.025
-const spawn_rate = 0.5
+const spawn_rate = 2.0
 var xp_grant = 1
 signal enemy_attack
 signal enemy_death
@@ -13,7 +13,8 @@ var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
 
-func _physics_process(delta):
+
+func _physics_process(_delta):
 	if $Sprite.visible:
 		if(position.x > Player.get_position().x):
 			var direction = (-Player.get_position().x)
