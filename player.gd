@@ -106,7 +106,7 @@ func _physics_process(_delta):
 	if current_health <= 0:
 		is_dead = true
 		$AnimationPlayer.play("death")
-		yield($AnimationPlayer, "finshed")
+		yield($AnimationPlayer, "finished")
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "death":
