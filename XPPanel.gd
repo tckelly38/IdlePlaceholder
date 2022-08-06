@@ -23,7 +23,7 @@ func on_level_up():
 
 	tween.interpolate_property(self, 'scale', Vector2(0, 0), max_size, 0.7, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.start()
-	add_child(tween)
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,16 +1,30 @@
 extends Control
 
 const Enemy = preload("res://enemy.tscn")
-const ObjectiveContainer = preload("res://ObjContainer.gd")
+onready var timer = get_node("SlimeEnemyTimer")
 signal enemy_spawned
 
 func _ready():
 	Player.visible = true
-	var timer = get_node("SlimeEnemyTimer")
+
 	var e = Enemy.instance()
 	timer.set_wait_time(e.spawn_rate)
 	timer.set_one_shot(false)
 	timer.start()
+	
+	get_node("collision_Wall").position.x = Player.position.x
+	get_node("collision_Wall").position.y = Player.position.y
+	
+	#this doesn't appear to do anything
+	get_node("collision_Wall").scale.x = rect_scale.x
+	get_node("collision_Wall").scale.y = rect_scale.y
+	
+func _process(_delta):
+	pass
+#	get_node("collision_Wall").position.x = Player.position.x
+#	get_node("collision_Wall").position.y = Player.position.y
+#	get_node("collision_Wall").scale.x = rect_scale.x
+#	get_node("collision_Wall").scale.y = rect_scale.y
 
 func _on_Back_pressed():
 	var error_code = get_tree().change_scene("res://MainMenu.tscn")

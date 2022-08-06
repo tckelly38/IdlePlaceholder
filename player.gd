@@ -62,7 +62,6 @@ func timer_setup(timer_name, wait_time):
 	var timer = get_node(timer_name)
 	timer.set_wait_time(wait_time)
 	timer.set_one_shot(false)
-	#add_child(timer)
 	timer.start()
 	
 func get_total_attack_dam():
