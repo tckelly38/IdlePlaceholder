@@ -42,6 +42,7 @@ func _on_spawn_enemy(pos):
 
 func _on_SlimeEnemyTimer_timeout():
 	var pos = Player.position
-	pos.y += rand_range(get_viewport().size.y / - 2 + 10, get_viewport().size.y / 2 - 10)
+
+	pos.y = rand_range(get_node("ObjContainer").rect_size.y + 5, get_viewport().size.y - 10)
 	pos.x = get_viewport().size.x - 100
 	spawn_enemy(pos)

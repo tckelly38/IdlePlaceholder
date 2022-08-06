@@ -4,7 +4,7 @@ var hit_damage = 10
 var hit_rate = 1
 var health = 100
 var speed = 0.025
-const spawn_rate = 2.0
+const spawn_rate = 0.5
 var xp_grant = 1
 signal enemy_attack
 signal enemy_death
