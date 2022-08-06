@@ -2,7 +2,7 @@ extends Position2D
 
 var current_objective = ""
 var objectives_prefix_list = ["Kill"]
-var objectives_target_goal_list = ["10", "5", "20"]#, "100", "50"]
+var objectives_target_goal_list = ["10", "5", "20", "100", "50"]
 var objectives_suffix_list = ["Slimes"]
 var target_goal = 10
 var current_value = 0
