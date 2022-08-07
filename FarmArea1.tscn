@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://FarmArea1.gd" type="Script" id=1]
 [ext_resource path="res://XPBar.gd" type="Script" id=2]
 [ext_resource path="res://sci-fi-godot-theme/sci-fi-theme.tres" type="Theme" id=3]
 [ext_resource path="res://LevelText.gd" type="Script" id=4]
-[ext_resource path="res://ObjectiveContent.tscn" type="PackedScene" id=5]
 [ext_resource path="res://ObjContainer.gd" type="Script" id=6]
 [ext_resource path="res://HealthBar.tscn" type="PackedScene" id=7]
 
@@ -79,40 +78,6 @@ margin_top = 2.0
 margin_bottom = 100.0
 tab_align = 2
 script = ExtResource( 6 )
-
-[node name="Obj1" type="Tabs" parent="ObjContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 2.0
-margin_top = 15.0
-margin_right = -2.0
-margin_bottom = -2.0
-tab_align = 0
-
-[node name="ObjectiveContent" parent="ObjContainer/Obj1" instance=ExtResource( 5 )]
-
-[node name="Obj2" type="Tabs" parent="ObjContainer"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 2.0
-margin_top = 13.0
-margin_right = -2.0
-margin_bottom = -2.0
-scrolling_enabled = false
-
-[node name="ObjectiveContent" parent="ObjContainer/Obj2" instance=ExtResource( 5 )]
-
-[node name="Obj3" type="Tabs" parent="ObjContainer"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 2.0
-margin_top = 13.0
-margin_right = -2.0
-margin_bottom = -2.0
-
-[node name="ObjectiveContent" parent="ObjContainer/Obj3" instance=ExtResource( 5 )]
 
 [node name="HealthBarPosition" parent="." instance=ExtResource( 7 )]
 position = Vector2( 521, -11 )

@@ -1,11 +1,26 @@
 extends TabContainer
 
 signal update_content
+const ObjectiveContent = preload("res://ObjectiveContent.tscn")
+const number_of_objectives = 5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	for i in range(0, number_of_objectives):
+		var obj = Tabs.new()
+		var objContent = ObjectiveContent.instance()
+		obj.add_child(objContent)
+		add_child(obj)
+		set_tab_title(i, "Obj" + str(i + 1))
+		set_tab_disabled(i, true)
+		
 	for i in range(1, get_tab_count()):
 		set_tab_disabled(i, true)
+	
+	set_tab_disabled(0, false)
+	
+	
+	
 #		var content : Position2D = child.get_child(0)
 #		if content.has_method("on_update_content"):
 #			connect("update_content", content, "on_update_content")
