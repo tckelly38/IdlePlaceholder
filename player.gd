@@ -73,6 +73,8 @@ func get_total_attack_dam():
 	return [attack, false]
 	
 func give_damage():
+	if is_dead:
+		return
 	$AnimationPlayer.play("shoot")
 	var best_target = null
 	var enemies = get_tree().get_nodes_in_group("enemies")
@@ -92,6 +94,8 @@ func _input(_event):
 		give_damage()
 
 func on_take_damage(damage):
+	if is_dead:
+		return
 	current_health -= damage * defense
 	$AnimationPlayer.play("hit")
 	emit_signal("update_health", current_health, max_health)
@@ -103,10 +107,11 @@ func on_objective_finished(xp):
 	gain_experience(xp)
 	
 func _physics_process(_delta):
-	if current_health <= 0:
+	if current_health <= 0 and !is_dead:
 		is_dead = true
 		$AnimationPlayer.play("death")
-		yield($AnimationPlayer, "finished")
+		#yield($AnimationPlayer, "animation_finished")
+		#var error_code = get_tree().change_scene("res://MainMenu.tscn")
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "death":

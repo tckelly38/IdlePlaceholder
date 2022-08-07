@@ -3,12 +3,14 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	VisualServer.set_default_clear_color(Color("20506a"))
 	get_node("Farm/Farm Area 1").get_font("font", "sci-fi-theme").size = 20
 	Player.visible = false
 	# TODO: for now we make sure player is alive
 	Player.current_health = Player.max_health
 	Player.is_dead = false
 	$"Farm/Farm Area 1".grab_focus()
+	
 
 
 func _on_Farm_Area_1_pressed():

@@ -13,7 +13,7 @@ var hiding_position = Vector2()
 var is_animating = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	connect("health_bar_ready", Player, "on_health_bar_ready")
+	#connect("health_bar_ready", Player, "on_health_bar_ready")
 	Player.connect("update_health", self, "on_health_bar_update")
 	emit_signal("health_bar_ready", true)
 	
@@ -26,7 +26,7 @@ func _ready():
 	position = hiding_position
 	
 	
-func _process(delta):
+func _process(_delta):
 	#if we are at full health and the bar is displayed in the final position then go ahead and wait and hide it
 	if Player.current_health == Player.max_health and final_position.y == position.y and !is_animating:
 		is_animating = true

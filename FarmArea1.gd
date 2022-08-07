@@ -3,9 +3,13 @@ extends Control
 const Enemy = preload("res://enemy.tscn")
 onready var timer = get_node("SlimeEnemyTimer")
 signal enemy_spawned
+const bg_colors = ["eeffed", "d7eed2", "b8e4c0", "acd2bd", "5a8994"]
+var objectives_complete = 0
+
 
 func _ready():
 	Player.visible = true
+	VisualServer.set_default_clear_color(Color(bg_colors[objectives_complete]))
 
 	var e = Enemy.instance()
 	timer.set_wait_time(e.spawn_rate)
@@ -46,3 +50,15 @@ func _on_SlimeEnemyTimer_timeout():
 	pos.y = rand_range(get_node("ObjContainer").rect_size.y + 5, get_viewport().size.y - 10)
 	pos.x = get_viewport().size.x - 100
 	spawn_enemy(pos)
+
+func on_objective_finished(_reward):
+	# we need to despawn enemies,  transition out, animate player spawning in
+	# pause timer to prevent spawning
+	timer.stop()
+	get_tree().call_group("enemies", "queue_free")
+	objectives_complete += 1
+	if(objectives_complete < bg_colors.size()):
+		VisualServer.set_default_clear_color(Color(bg_colors[objectives_complete]))
+	timer.start()
+	
+	

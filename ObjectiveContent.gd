@@ -14,6 +14,7 @@ onready var tween = get_node("Tween")
 signal objective_finished
 var processing_objective_achieved = false
 var receive_signal = "on_enemy_death"
+onready var obj_container = get_parent().get_parent()
 
 # builds a random objective by picking random parts from the static lists
 func pick_objective():
@@ -35,10 +36,18 @@ func _ready():
 	if error_code:
 		print("Error: unable to connect to Player.on_objective_finished from ObjectiveContainer")
 	
-	error_code = get_parent().get_parent().connect("update_content", self, "on_update_content")
+	error_code = obj_container.connect("update_content", self, "on_update_content")
 	if error_code:
 		print("Error: Unable to connect parent container to objectivecontent")
 		
+	error_code = connect("objective_finished", obj_container, "on_objective_finished")
+	if error_code:
+		print("Error: unable to connect to objcontainer.on_objective_finished from ObjectiveContainer")
+	
+	error_code = connect("objective_finished", get_parent().get_parent().get_parent(), "on_objective_finished")
+	if error_code:
+		print("Error: unable to connect to objcontainer.on_objective_finished from ObjectiveContainer")
+	
 	pick_objective()
 	objective_label.text = current_objective
 	objective_progress_bar.max_value = target_goal
@@ -49,7 +58,9 @@ func _ready():
 func goal_achieved():
 	# show ui
 	processing_objective_achieved = true
-	emit_signal("objective_finished", current_reward)
+
+	get_parent().set_tab_title(0, "Done!")
+
 	tween.interpolate_property(self, 'scale', Vector2(1, 1), Vector2(0, 0), 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.start()
 	yield(tween, "tween_completed")
@@ -63,6 +74,7 @@ func goal_achieved():
 	tween.interpolate_property(self, 'scale',Vector2(1, 1), Vector2(1, 1), 2.0, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 
 	yield(tween, "tween_completed")
+	emit_signal("objective_finished", current_reward)
 
 	#update ui elements and get new objective
 	current_value = 0
@@ -78,6 +90,8 @@ func update_values():
 	
 # we get notified by the Objective Manager that we need to update our values
 func on_update_content(): 
+	if !get_parent().visible:
+		return
 	# need to wait until we can get another objective displayed
 	if processing_objective_achieved:
 		return
