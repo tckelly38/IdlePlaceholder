@@ -59,8 +59,6 @@ func goal_achieved():
 	# show ui
 	processing_objective_achieved = true
 
-	get_parent().set_tab_title(0, "Done!")
-
 	tween.interpolate_property(self, 'scale', Vector2(1, 1), Vector2(0, 0), 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.start()
 	yield(tween, "tween_completed")

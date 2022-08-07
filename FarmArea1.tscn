@@ -82,6 +82,9 @@ script = ExtResource( 6 )
 [node name="HealthBarPosition" parent="." instance=ExtResource( 7 )]
 position = Vector2( 521, -11 )
 
+[node name="FullHealthTimer" type="Timer" parent="HealthBarPosition"]
+
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
 [connection signal="timeout" from="SlimeEnemyTimer" to="." method="_on_SlimeEnemyTimer_timeout"]
 [connection signal="tween_all_completed" from="Panel/Position2D/LabelTween" to="Panel" method="_on_LabelTween_tween_all_completed"]
+[connection signal="timeout" from="HealthBarPosition/FullHealthTimer" to="HealthBarPosition" method="_on_FullHealthTimer_timeout"]

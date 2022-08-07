@@ -146,7 +146,7 @@ func save():
 
 
 func _on_RegenTimer_timeout():
-	if !is_dead and current_health < max_health:
+	if !is_dead and current_health <= max_health:
 		current_health = min(current_health * regen_percent, max_health)
 		emit_signal("update_health", current_health, max_health)
 		

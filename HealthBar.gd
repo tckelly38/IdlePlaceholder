@@ -11,62 +11,57 @@ var starting_position = position #Vector2(get_viewport().size.x / 2, 0 - bar.rec
 var final_position = Vector2()
 var hiding_position = Vector2()
 var is_animating = false
+var time_to_wait = 2
+
+onready var timer = get_node("FullHealthTimer")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#connect("health_bar_ready", Player, "on_health_bar_ready")
-	Player.connect("update_health", self, "on_health_bar_update")
+	var error_code = Player.connect("update_health", self, "on_health_bar_update")
+	if error_code:
+		print("Error: error connecting to player to healthbar")
 	emit_signal("health_bar_ready", true)
 	
-	#final_position = Vector2(get_viewport().size.x / 2, 20)
+	final_position = Vector2(get_viewport().size.x / 2, 20)
 	hiding_position = Vector2(get_viewport().size.x / 2, -bar.rect_size.y)
 	
 	bar.value = Player.current_health
 	
 	bar.max_value = Player.max_health
 	position = hiding_position
-	
-	
-func _process(_delta):
-	#if we are at full health and the bar is displayed in the final position then go ahead and wait and hide it
-	if Player.current_health == Player.max_health and final_position.y == position.y and !is_animating:
-		is_animating = true
-		# we want to keep the life bar out for 10 seconds until putting away
-		tween.interpolate_property(self, 'global_position', Vector2(get_viewport().size.x / 2, 20), Vector2(get_viewport().size.x / 2, 20) , 2, Tween.TRANS_LINEAR, Tween.EASE_IN)
-		
-		tween.start()
-		yield(tween, "tween_completed")
-		
 
-		tween.interpolate_property(self, 'global_position', Vector2(get_viewport().size.x / 2, 20), hiding_position, 1.5, Tween.TRANS_LINEAR, Tween.EASE_IN)
-		tween.start()
-		yield(tween, "tween_completed")
-		is_animating = false
+	timer.set_wait_time(time_to_wait)
+	timer.set_one_shot(true)
+	
 
 func on_health_bar_update(val, max_val):
 	bar.value = val
 	bar.max_value = max_val
-
 	
 	if !is_animating and val != max_val:
 		#tween.stop_all()
 		starting_position = position
 		is_animating = true
-		tween.interpolate_property(self, 'global_position', starting_position, Vector2(get_viewport().size.x / 2, 20) , 1.5, Tween.TRANS_LINEAR, Tween.EASE_IN)
+		tween.interpolate_property(self, 'global_position', starting_position, Vector2(get_viewport().size.x / 2, 20) , 0.7, Tween.TRANS_LINEAR, Tween.EASE_IN)
 
 		tween.start()
 		yield(tween, "tween_completed")
 		
-		# we want to keep the life bar out for 10 seconds until putting away
-		tween.interpolate_property(self, 'global_position', Vector2(get_viewport().size.x / 2, 20), Vector2(get_viewport().size.x / 2, 20) , 2, Tween.TRANS_LINEAR, Tween.EASE_IN)
-		
-		tween.start()
-		yield(tween, "tween_completed")
-
 		is_animating = false
+		
+	if val >= max_val and timer.time_left == 0:
+		timer.start()   
 	
 
 func _exit_tree():
 	emit_signal("health_bar_ready", false)
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+
+func _on_FullHealthTimer_timeout():
+	if bar.max_value == bar.value and position != hiding_position:
+		is_animating = true
+		
+		tween.interpolate_property(self, 'global_position', position, hiding_position, 0.7, Tween.TRANS_LINEAR, Tween.EASE_IN)
+		tween.start()
+		yield(tween, "tween_completed")
+		is_animating = false
+
