@@ -16,22 +16,10 @@ func _ready():
 		
 	for i in range(1, get_tab_count()):
 		set_tab_disabled(i, true)
+		set_tab_title(i, "???")
 	
 	set_tab_disabled(0, false)
 	
-	
-	
-#		var content : Position2D = child.get_child(0)
-#		if content.has_method("on_update_content"):
-#			connect("update_content", content, "on_update_content")
-
-#	for child in get_children():
-#		var content : Position2D = child.get_child(0)
-#		if content.has_method("on_update_content"):
-#			connect("update_content", content, "on_update_content")
-#	connect("enemy_death", ("/root/FarmArea1/ObjContainer/Obj 1/ObjectiveContent"), "on_enemy_death")
-#	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 2/ObjectiveContent"), "on_enemy_death")
-#	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 3/ObjectiveContent"), "on_enemy_death")
 
 # this container acts as manager for its child tabs
 # we intercept the enemy death signal in here so that we can reduce having the enemy connect
@@ -46,5 +34,6 @@ func on_objective_finished(_reward):
 	if(current_tab < get_tab_count()):
 		current_tab += 1
 		set_tab_disabled(current_tab, false)
+		set_tab_title(current_tab, "Obj" + str(current_tab + 1))
 
 

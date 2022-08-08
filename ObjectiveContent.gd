@@ -12,6 +12,7 @@ onready var objective_progress_bar = get_node("Objective Progress Bar")
 onready var tween = get_node("Tween")
 
 signal objective_finished
+signal objective_finished_start
 var processing_objective_achieved = false
 var receive_signal = "on_enemy_death"
 onready var obj_container = get_parent().get_parent()
@@ -47,6 +48,10 @@ func _ready():
 	error_code = connect("objective_finished", get_parent().get_parent().get_parent(), "on_objective_finished")
 	if error_code:
 		print("Error: unable to connect to objcontainer.on_objective_finished from ObjectiveContainer")
+		
+	error_code = connect("objective_finished_start", get_parent().get_parent().get_parent(), "on_objective_finished_start")
+	if error_code:
+		print("Error: unable to connect to objcontainer.on_objective_finished_start from ObjectiveContainer")
 	
 	pick_objective()
 	objective_label.text = current_objective
@@ -58,7 +63,7 @@ func _ready():
 func goal_achieved():
 	# show ui
 	processing_objective_achieved = true
-
+	emit_signal("objective_finished_start")
 	tween.interpolate_property(self, 'scale', Vector2(1, 1), Vector2(0, 0), 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	tween.start()
 	yield(tween, "tween_completed")

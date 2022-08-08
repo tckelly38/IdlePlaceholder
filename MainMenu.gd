@@ -10,14 +10,11 @@ func _ready():
 	Player.current_health = Player.max_health
 	Player.is_dead = false
 	$"Farm/Farm Area 1".grab_focus()
-	
-
 
 func _on_Farm_Area_1_pressed():
 	var error_code = get_tree().change_scene("res://FarmArea1.tscn")
 	if error_code:
 		print("Error: no farm area1 exists")
-
 
 func _on_Save_pressed():
 	var save_game = File.new()
