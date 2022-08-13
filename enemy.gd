@@ -14,6 +14,7 @@ var isInAttackRange= false
 var floating_text = preload("res://FloatingPoint.tscn")
 
 
+
 func _physics_process(_delta):
 	if $Sprite.visible:
 		if(position.x > Player.get_position().x):
@@ -36,7 +37,7 @@ func hit(damage, isCrit):
 		$AnimationPlayer.play("hit")
 		
 func die():
-	emit_signal("enemy_death", xp_grant)
+	emit_signal("enemy_death", xp_grant, position)
 	# disable to prevent regen (_process func)
 	set_process(false)
 	get_tree().queue_delete(self)
@@ -60,6 +61,10 @@ func _ready():
 		error_code = connect("enemy_death", get_node("/root/FarmArea1/ObjContainer"), "on_enemy_death")
 		if error_code:
 			print("Error: error unable to connect to ObjContainer from enemy")
+			
+	error_code = connect("enemy_death", get_node("/root/FarmArea1"), "on_enemy_death")
+	if error_code:
+			print("Error: error unable to connect to farm area from enemy")
 #	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 2/ObjectiveContent"), "on_enemy_death")
 #	connect("enemy_death", get_node("/root/FarmArea1/ObjContainer/Obj 3/ObjectiveContent"), "on_enemy_death")
 	

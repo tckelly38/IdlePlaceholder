@@ -16,6 +16,30 @@ anchor_bottom = 1.0
 theme = ExtResource( 3 )
 script = ExtResource( 1 )
 
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="BackParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/BackParallaxLayer"]
+position = Vector2( 528, 296.5 )
+scale = Vector2( 4.4875, 3.57917 )
+
+[node name="MiddleParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/MiddleParallaxLayer"]
+position = Vector2( 513, 300.5 )
+scale = Vector2( 3.19375, 2.49583 )
+
+[node name="FrontParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2( -1, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/FrontParallaxLayer"]
+position = Vector2( 511.5, 299 )
+scale = Vector2( 3.19062, 2.50833 )
+
+[node name="TileMap" type="TileMap" parent="."]
+format = 1
+
 [node name="Back" type="Button" parent="."]
 margin_right = 64.0
 margin_bottom = 20.0

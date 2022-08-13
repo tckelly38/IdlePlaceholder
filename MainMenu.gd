@@ -47,9 +47,6 @@ func load_game():
 		for i in node_data.keys():
 			Player.set(i, node_data[i])
 	save_game.close()
-
-
-
+	
 func _on_Load_pressed():
 	load_game()
-	pass # Replace with function body.

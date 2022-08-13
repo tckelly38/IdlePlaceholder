@@ -100,7 +100,7 @@ func on_take_damage(damage):
 	$AnimationPlayer.play("hit")
 	emit_signal("update_health", current_health, max_health)
 
-func on_enemy_death(xp):
+func on_enemy_death(xp, _pos):
 	gain_experience(xp)
 	
 func on_objective_finished(xp):

@@ -26,7 +26,7 @@ func _ready():
 # to every tab
 # other possibilities involve moving all of the objectivecontents code into this class
 # which would make it so we just manage in this class only
-func on_enemy_death(_xp):
+func on_enemy_death(_xp, _pos):
 	emit_signal("update_content")  
 	
 func on_objective_finished(_reward):

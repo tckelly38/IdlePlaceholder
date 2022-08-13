@@ -1,0 +1,44 @@
+{
+  "gold": {
+    "Cost in Tries": 10,
+    "Risk": 0.5,
+    "Drop Chance": 0.06696700846319259,
+    "Notes": "success = 1 - risk^(1/tries)",
+    "total": 0.14252145213379352
+  },
+  "health": {
+    "Cost in Tries": 25,
+    "Risk": 0.5,
+    "Drop Chance": 0.02734505258771447,
+    "Notes": null,
+    "total": null
+  },
+  "armor": {
+    "Cost in Tries": 100,
+    "Risk": 0.5,
+    "Drop Chance": 0.006907504562964073,
+    "Notes": null,
+    "total": null
+  },
+  "double_xp": {
+    "Cost in Tries": 50,
+    "Risk": 0.5,
+    "Drop Chance": 0.013767295506640798,
+    "Notes": null,
+    "total": null
+  },
+  "increase_fire_rate": {
+    "Cost in Tries": 50,
+    "Risk": 0.5,
+    "Drop Chance": 0.013767295506640798,
+    "Notes": null,
+    "total": null
+  },
+  "invincible": {
+    "Cost in Tries": 50,
+    "Risk": 0.5,
+    "Drop Chance": 0.013767295506640798,
+    "Notes": null,
+    "total": null
+  }
+}

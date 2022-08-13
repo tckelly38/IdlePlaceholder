@@ -5,9 +5,12 @@ onready var timer = get_node("SlimeEnemyTimer")
 signal enemy_spawned
 const bg_colors = ["eeffed", "d7eed2", "b8e4c0", "acd2bd", "5a8994"]
 var objectives_complete = 0
+onready var loot_table := LootDropResource.new()
+
 
 var arrow = preload("res://arrow.png")
 var arrow_sprite = Sprite.new()
+const DropResource = preload("res://loot_table/DropResources/DropResource.tscn")
 
 
 func _ready():
@@ -31,11 +34,17 @@ func _ready():
 	arrow_sprite.visible = false
 	arrow_sprite.modulate = Color.aqua
 	add_child(arrow_sprite)
-	
 
 	
 func _process(_delta):
-	pass
+	self.get_node("ParallaxBackground/BackParallaxLayer").motion_mirroring.x = get_viewport().size.x
+	self.get_node("ParallaxBackground/MiddleParallaxLayer").motion_mirroring.x = get_viewport().size.x
+	self.get_node("ParallaxBackground/FrontParallaxLayer").motion_mirroring.x = get_viewport().size.x
+	
+	self.get_node("ParallaxBackground/BackParallaxLayer").motion_offset.x += -1
+	self.get_node("ParallaxBackground/MiddleParallaxLayer").motion_offset.x += -1
+	self.get_node("ParallaxBackground/FrontParallaxLayer").motion_offset.x += -1
+	
 #	get_node("collision_Wall").position.x = Player.position.x
 #	get_node("collision_Wall").position.y = Player.position.y
 #	get_node("collision_Wall").scale.x = rect_scale.x
@@ -81,10 +90,17 @@ func simulate_end():
 	objectives_complete += 1
 	if(objectives_complete < bg_colors.size()):
 		VisualServer.set_default_clear_color(Color(bg_colors[objectives_complete]))
-
 	
 func on_objective_finished_start():
 	add_arrow()
+	
+func on_enemy_death(_xp, pos):
+	var item = loot_table.get_reward()
+	if item:
+		var drop_res = DropResource.instance()
+		drop_res.rect_position = pos
+		drop_res.spawn_resource(item.item_name)
+		add_child(drop_res)
 	
 func on_objective_finished(_reward):
 	# we need to despawn enemies,  transition out, animate player spawning in
@@ -92,6 +108,3 @@ func on_objective_finished(_reward):
 	timer.stop()
 	simulate_end()
 	timer.start()
-	
-	
-	
