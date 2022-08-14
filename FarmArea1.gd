@@ -98,7 +98,7 @@ func on_enemy_death(_xp, pos):
 	var item = loot_table.get_reward()
 	if item:
 		var drop_res = DropResource.instance()
-		drop_res.rect_position = pos
+		drop_res.position = pos
 		drop_res.spawn_resource(item.item_name)
 		add_child(drop_res)
 	
