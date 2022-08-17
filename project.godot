@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "LootItem",
 "language": "GDScript",
 "path": "res://loot_table/LootItem.gd"
+}, {
+"base": "Resource",
+"class": "PlayerBank",
+"language": "GDScript",
+"path": "res://PlayerBank.gd"
 } ]
 _global_script_class_icons={
 "GitAPI": "",
 "LootDropResource": "",
-"LootItem": ""
+"LootItem": "",
+"PlayerBank": ""
 }
 
 [application]

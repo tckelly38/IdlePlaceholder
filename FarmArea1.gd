@@ -44,6 +44,8 @@ func _process(_delta):
 	self.get_node("ParallaxBackground/BackParallaxLayer").motion_offset.x += -1
 	self.get_node("ParallaxBackground/MiddleParallaxLayer").motion_offset.x += -1
 	self.get_node("ParallaxBackground/FrontParallaxLayer").motion_offset.x += -1
+	if Player.bank:
+		$BankPanel.get_node("BankValue").text = String(Player.bank.get_total())
 	
 #	get_node("collision_Wall").position.x = Player.position.x
 #	get_node("collision_Wall").position.y = Player.position.y
@@ -99,7 +101,7 @@ func on_enemy_death(_xp, pos):
 	if item:
 		var drop_res = DropResource.instance()
 		drop_res.position = pos
-		drop_res.spawn_resource(item.item_name)
+		drop_res.spawn_resource(item)
 		add_child(drop_res)
 	
 func on_objective_finished(_reward):

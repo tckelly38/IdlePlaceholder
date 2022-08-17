@@ -46,7 +46,10 @@ func load_json_file(path):
 func load_loot_drops():
 	var loot_table = load_json_file("res://Databases/LootDrops.json")
 	for loot in loot_table:
-		var item := LootItem.new(loot, loot_table[loot]["Cost in Tries"], loot_table[loot]["Risk"], loot_table[loot]["Drop Chance"])
+		var item := LootItem.new(loot, loot_table[loot]["cost_in_tries"], loot_table[loot]["risk"],\
+								 loot_table[loot]["drop_chance"], loot_table[loot]["sprite_source"],\
+								 loot_table[loot]["is_animated"], loot_table[loot]["h_frames"],\
+								 loot_table[loot]["v_frames"])
 		LootTable.append(item)
 	#print(loot_table["armor"]["Risk"])
 

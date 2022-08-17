@@ -13,8 +13,6 @@ var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
 
-
-
 func _physics_process(_delta):
 	if $Sprite.visible:
 		if(position.x > Player.get_position().x):

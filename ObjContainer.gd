@@ -27,7 +27,10 @@ func _ready():
 # other possibilities involve moving all of the objectivecontents code into this class
 # which would make it so we just manage in this class only
 func on_enemy_death(_xp, _pos):
-	emit_signal("update_content")  
+	emit_signal("update_content", "kill")
+
+func on_item_picked_up(item):
+	emit_signal("update_content", item.item_name)
 	
 func on_objective_finished(_reward):
 	set_tab_disabled(current_tab, true)

@@ -15,7 +15,7 @@ func _ready():
 			label.set("custom_colors/font_color", Color('ff6633'))
 		"Critical":
 			label.set("custom_colors/font_color", Color('cc0000'))
-			max_size = Vector2(1.5, 1.5)
+			max_size = Vector2(2.0, 2.0)
 	
 	randomize()
 	var side_movement = randi() % 121 - 60
@@ -28,6 +28,7 @@ func _ready():
 	
 
 func _on_Tween_tween_all_completed():
+	set_process(false)
 	self.queue_free()
 	
 func _process(delta):

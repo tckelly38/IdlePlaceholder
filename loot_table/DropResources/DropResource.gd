@@ -1,35 +1,47 @@
 extends Node2D
 
+signal item_clicked
+var my_item: LootItem = null
 
-var gold_texture = preload("res://loot_table/DropResources/gold_sprite.png")
-var animated_gold: Texture = preload("res://loot_table/DropResources/MonedaD.png")
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	var obj = get_node("/root/FarmArea1/ObjContainer")
+	if obj.has_method("on_item_picked_up"):
+		var error_code = connect("item_clicked", get_node("/root/FarmArea1/ObjContainer"), "on_item_picked_up")
+		if error_code:
+			print("Error: error unable to connect to ObjContainer from drop")
+	var error_code = connect("item_clicked", Player, "on_item_picked_up")
+	if error_code:
+		print("Error: error unable to connect to player from drop")
 
-func spawn_resource(type):
-	if type == "gold":
-		$Sprite.hframes = 5           
-		$Sprite.vframes = 1
-		$Sprite.texture = animated_gold
-		$Button.rect_size.x = $Sprite.get_rect().size.x
-		$Button.rect_size.y = $Sprite.get_rect().size.y
+
+func spawn_resource(item):
+	my_item = item
+
+	if !my_item.sprite_source:
+		return
+	
+	# check if sprite source exists
+	var sprite_file = File.new()
+	if !sprite_file.file_exists(my_item.sprite_source):
+		return
+		
+	$Sprite.texture = load(my_item.sprite_source)
+	$Button.rect_size.x = $Sprite.get_rect().size.x
+	$Button.rect_size.y = $Sprite.get_rect().size.y
+	
+	if my_item.is_animated:
+		$Sprite.hframes = my_item.h_frames        
+		$Sprite.vframes = my_item.v_frames
+
 		var defaultAnim = Animation.new()
 		defaultAnim.add_track(0)
-		defaultAnim.length = 0.5
+		defaultAnim.length = 0.1 * (my_item.total_frames)
 		
-		var path = String(get_node(".").get_path()) + "Sprite:frame"
+		var path = "Sprite:frame"
 		defaultAnim.track_set_path(0, path)
-		defaultAnim.track_insert_key(0, 0.0, 0)
-		defaultAnim.track_insert_key(0, 0.1, 1)
-		defaultAnim.track_insert_key(0, 0.2, 2)
-		defaultAnim.track_insert_key(0, 0.3, 3)
-		defaultAnim.track_insert_key(0, 0.4, 4)
+		for i in range(my_item.total_frames):
+			defaultAnim.track_insert_key(0, i * 0.1, i)
+
 		defaultAnim.value_track_set_update_mode(0, Animation.UPDATE_DISCRETE)
 		defaultAnim.loop = true
 		
@@ -39,36 +51,8 @@ func spawn_resource(type):
 		aPlayer.set_current_animation("default")
 		aPlayer.play("default")
 
-		
-
-		#self.texture_normal = gold_texture
-		#sprite.position = pos
-
-		
-#func _unhandled_input(event):
-#	if event is InputEventMouseButton and event.is_pressed() and not event.is_echo() and event.button_index == BUTTON_LEFT:
-#		if get_rect().has_point(event.position):
-#			print("clicked")
-#			get_tree().set_input_as_handled()
-	# we get a string, like gold
-	# we load up a gold resource?, spawn it at pos (likely where enemy died)
-	# make it clickable
-	# register click
-	
-	
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-
-
-
-func _on_Area2D_pressed():
-	print("clicked")
-	pass # Replace with function body.
-
-
 func _on_Button_pressed():
 	print("clicked")
-	pass # Replace with function body.
+	emit_signal("item_clicked", my_item)
+	set_process(false)
+	get_tree().queue_delete(self)

@@ -17,6 +17,8 @@ var xp_in_current_level = 0
 var experience_total = 0
 var experience_in_level = 0
 
+export(Resource) var bank
+
 var experience_requred = get_required_experience(level + 1)
 signal experience_gained
 signal level_up
@@ -59,6 +61,7 @@ func level_up():
 func _ready():
 	timer_setup("AttackTimer", idle_attack_rate)
 	timer_setup("RegenTimer", regen_rate)
+	bank = load("res://PlayerBank.tres")
 
 func timer_setup(timer_name, wait_time):
 	var timer = get_node(timer_name)
@@ -149,5 +152,10 @@ func _on_RegenTimer_timeout():
 	if !is_dead and current_health <= max_health:
 		current_health = min(current_health * regen_percent, max_health)
 		emit_signal("update_health", current_health, max_health)
+		
+
+func on_item_picked_up(item):
+	if item.item_name == "gold":
+		bank.add_gold()
 		
 

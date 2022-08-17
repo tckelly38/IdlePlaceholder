@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/MonedaD.png-004899634ab8b29b6373f174fdc07331.stex"
+path="res://.import/gold.png-ec5325e9c95ef3320ee4b51e6a5f2fcb.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://loot_table/DropResources/MonedaD.png"
-dest_files=[ "res://.import/MonedaD.png-004899634ab8b29b6373f174fdc07331.stex" ]
+source_file="res://loot_table/DropResources/drop_resources/gold.png"
+dest_files=[ "res://.import/gold.png-ec5325e9c95ef3320ee4b51e6a5f2fcb.stex" ]
 
 [params]
 

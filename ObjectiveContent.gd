@@ -1,9 +1,10 @@
 extends Position2D
 
 var current_objective = ""
-var objectives_prefix_list = ["Kill"]
 var objectives_target_goal_list = ["10", "5", "20", "100", "50"]
-var objectives_suffix_list = ["Slimes"]
+var objectives = ["Kill %s Slimes", "Pickup %s Gold"]
+
+
 var target_goal = 10
 var current_value = 0
 var current_reward = 10
@@ -14,20 +15,16 @@ onready var tween = get_node("Tween")
 signal objective_finished
 signal objective_finished_start
 var processing_objective_achieved = false
-var receive_signal = "on_enemy_death"
 onready var obj_container = get_parent().get_parent()
 
 # builds a random objective by picking random parts from the static lists
 func pick_objective():
 	randomize()
-	var obj_prefix = objectives_prefix_list[randi() % objectives_prefix_list.size()]
+	current_objective = objectives[randi() % objectives.size()]
 	target_goal = int(objectives_target_goal_list[randi() % objectives_target_goal_list.size()])
-	var obj_suffix = objectives_suffix_list[randi() % objectives_suffix_list.size()]
-	current_objective = obj_prefix + " " + str(target_goal) + " " + obj_suffix
+	current_objective = current_objective % String(target_goal)
 	current_value = 0
-	match obj_prefix:
-		"Kill":
-			receive_signal = "on_enemy_death"
+
 				
 # Called when the node enters the scene tree for the first time.
 # connect to player to notify when event obj finished
@@ -92,13 +89,17 @@ func update_values():
 	objective_progress_bar.value = current_value
 	
 # we get notified by the Objective Manager that we need to update our values
-func on_update_content(): 
+func on_update_content(type): 
 	if !get_parent().visible:
 		return
+		
+	if !type in current_objective.to_lower():
+		return
+		
 	# need to wait until we can get another objective displayed
 	if processing_objective_achieved:
 		return
-	
+		
 #	if(receive_signal != "on_enemy_death"):
 #		return
 	
