@@ -1,7 +1,7 @@
 extends Position2D
 
 var current_objective = ""
-var objectives_target_goal_list = ["10", "5", "20", "100", "50"]
+var objectives_target_goal_list = ["10", "5"]
 var objectives = ["Kill %s Slimes", "Pickup %s Gold"]
 
 
@@ -49,6 +49,10 @@ func _ready():
 	error_code = connect("objective_finished_start", get_parent().get_parent().get_parent(), "on_objective_finished_start")
 	if error_code:
 		print("Error: unable to connect to objcontainer.on_objective_finished_start from ObjectiveContainer")
+		
+	error_code = obj_container.connect("final_objective_reached", self, "on_final_objective_reached")
+	if error_code:
+		print("Error: unable to connect to objcontainer.on_objective_finished_start from ObjectiveContainer")
 	
 	pick_objective()
 	objective_label.text = current_objective
@@ -90,6 +94,7 @@ func update_values():
 	
 # we get notified by the Objective Manager that we need to update our values
 func on_update_content(type): 
+	# only progress obj if its the currently presented one
 	if !get_parent().visible:
 		return
 		
@@ -107,3 +112,10 @@ func on_update_content(type):
 	
 	if current_value >= target_goal:
 		goal_achieved()
+		
+func on_final_objective_reached():
+	objective_progress_bar.visible = true
+	current_objective = "Defeat Boss!"
+	objective_label.text = current_objective
+	objective_progress_bar.max_value = 1
+	objective_progress_bar.value = 0

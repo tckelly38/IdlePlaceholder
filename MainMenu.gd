@@ -3,6 +3,18 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# hack to account for taskbar size
+	#OS.window_borderless = true
+	OS.set_window_maximized(true)
+	var taskbar_height = OS.get_screen_size().y - OS.get_real_window_size().y
+	var full_position = OS.get_window_position()
+	var full_size = OS.get_real_window_size()
+	OS.set_window_maximized(false)
+#	OS.window_borderless = false
+	OS.set_window_size(Vector2(full_size.x, full_size.y / 4))
+	
+	OS.set_window_position(Vector2(full_position.x, full_size.y - OS.get_window_size().y - taskbar_height + full_position.y * 2 + 1))# - taskbar_height))
+	
 	VisualServer.set_default_clear_color(Color("20506a"))
 	get_node("Farm/Farm Area 1").get_font("font", "sci-fi-theme").size = 20
 	Player.visible = false

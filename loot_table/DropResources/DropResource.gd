@@ -2,6 +2,7 @@ extends Node2D
 
 signal item_clicked
 var my_item: LootItem = null
+var floating_text = preload("res://FloatingPoint.tscn")
 
 func _ready():
 	var obj = get_node("/root/FarmArea1/ObjContainer")
@@ -12,6 +13,7 @@ func _ready():
 	var error_code = connect("item_clicked", Player, "on_item_picked_up")
 	if error_code:
 		print("Error: error unable to connect to player from drop")
+	
 
 
 func spawn_resource(item):
@@ -24,6 +26,7 @@ func spawn_resource(item):
 	var sprite_file = File.new()
 	if !sprite_file.file_exists(my_item.sprite_source):
 		return
+	
 		
 	$Sprite.texture = load(my_item.sprite_source)
 	$Button.rect_size.x = $Sprite.get_rect().size.x
@@ -50,9 +53,19 @@ func spawn_resource(item):
 		add_child(aPlayer)
 		aPlayer.set_current_animation("default")
 		aPlayer.play("default")
-
-func _on_Button_pressed():
-	print("clicked")
-	emit_signal("item_clicked", my_item)
+		
+func on_floating_text_finished_animating():
 	set_process(false)
 	get_tree().queue_delete(self)
+	
+func _on_Button_pressed():
+	var text = floating_text.instance()
+	text.content = "+1"
+	text.type = "Neutral"
+	text.custom_color = "d4af37"
+	add_child(text)
+	text.connect("floating_text_finished_animating", self, "on_floating_text_finished_animating")
+	emit_signal("item_clicked", my_item)
+	$Sprite.visible = false
+	$Button.disabled = true
+

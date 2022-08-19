@@ -46,6 +46,11 @@ config/icon="res://icon.png"
 
 Player="*res://Player.tscn"
 
+[display]
+
+window/size/width=1440
+window/size/height=540
+
 [editor]
 
 version_control_autoload_on_startup=true

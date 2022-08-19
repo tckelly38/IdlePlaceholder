@@ -8,11 +8,21 @@ const spawn_rate = 0.5
 var xp_grant = 1
 signal enemy_attack
 signal enemy_death
+var is_boss
 
 var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
+signal slime_boss_died
 
+func make_boss():
+	get_node("Sprite").scale = Vector2(10, 10)
+	speed = 0.01
+	xp_grant = 100
+	hit_damage = 100
+	health = 1000
+	is_boss = true
+	
 func _physics_process(_delta):
 	if $Sprite.visible:
 		if(position.x > Player.get_position().x):
@@ -23,7 +33,7 @@ func _physics_process(_delta):
 func hit(damage, isCrit):
 	health -= damage
 	var text = floating_text.instance()
-	text.amount = damage
+	text.content = str(damage)
 	if isCrit:
 		text.type = "Critical"
 	else:
@@ -36,6 +46,9 @@ func hit(damage, isCrit):
 		
 func die():
 	emit_signal("enemy_death", xp_grant, position)
+	if is_boss:
+		emit_signal("slime_boss_died")
+
 	# disable to prevent regen (_process func)
 	set_process(false)
 	get_tree().queue_delete(self)
@@ -45,6 +58,7 @@ func die():
 func _ready():
 	$AnimationPlayer.play("idle")
 	timer_setup("AttackTimer", hit_rate)
+	is_boss = false
 	
 	var error_code = connect("enemy_attack", Player, "on_take_damage")
 	if error_code:

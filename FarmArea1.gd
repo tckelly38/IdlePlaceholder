@@ -15,6 +15,11 @@ const DropResource = preload("res://loot_table/DropResources/DropResource.tscn")
 
 func _ready():
 	Player.visible = true
+	
+	var error_code = get_node("ObjContainer").connect("final_objective_reached", self, "on_final_objective_reached")
+	if error_code:
+		print("Error: unable to connect to obj container")
+		
 	VisualServer.set_default_clear_color(Color(bg_colors[objectives_complete]))
 
 	var e = Enemy.instance()
@@ -68,9 +73,19 @@ func _on_spawn_enemy(pos):
 
 func _on_SlimeEnemyTimer_timeout():
 	var pos = Player.position
-
+	var pos2 = pos
+	
 	pos.y = rand_range(get_node("ObjContainer").rect_size.y + 5, get_viewport().size.y - 10)
-	pos.x = get_viewport().size.x - 100
+	pos.x = get_viewport().size.x - 50
+	pos2.y = rand_range(10, get_node("ObjContainer").rect_size.y)
+	pos2.x = pos.x - get_node("ObjContainer").rect_size.x 
+	
+	#25% chance we spawn near obj container or below it
+	randomize()
+	if randi() % 4 == 0:
+		pos = pos2
+	
+	
 	spawn_enemy(pos)
 
 func add_arrow():
@@ -110,3 +125,20 @@ func on_objective_finished(_reward):
 	timer.stop()
 	simulate_end()
 	timer.start()
+	
+func on_final_objective_reached():
+	get_tree().call_group("enemies", "queue_free")
+	timer.stop()
+	
+	var pos = Player.position
+
+	pos.y = get_viewport().size.y / 2
+	pos.x = get_viewport().size.x - 100
+	
+	var e = Enemy.instance()
+	e.make_boss()
+	e.position = pos
+	add_child(e)
+	
+	
+	pass

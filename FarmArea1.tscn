@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://FarmArea1.gd" type="Script" id=1]
 [ext_resource path="res://XPBar.gd" type="Script" id=2]
 [ext_resource path="res://sci-fi-godot-theme/sci-fi-theme.tres" type="Theme" id=3]
-[ext_resource path="res://LevelText.gd" type="Script" id=4]
+[ext_resource path="res://XPPanel.gd" type="Script" id=4]
 [ext_resource path="res://loot_table/DropResources/drop_resources/gold.png" type="Texture" id=5]
 [ext_resource path="res://ObjContainer.gd" type="Script" id=6]
 [ext_resource path="res://HealthBar.tscn" type="PackedScene" id=7]
+[ext_resource path="res://BankPanel.gd" type="Script" id=8]
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 11.5, 303.625 )
@@ -68,18 +69,19 @@ step = 1.0
 percent_visible = false
 script = ExtResource( 2 )
 
-[node name="Panel" type="Panel" parent="."]
+[node name="LevelPanel" type="Panel" parent="."]
+unique_name_in_owner = true
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -71.0
 margin_right = 71.0
 margin_bottom = -5.0
 
-[node name="Position2D" type="Position2D" parent="Panel"]
+[node name="Position2D" type="Position2D" parent="LevelPanel"]
 position = Vector2( 35, 31 )
 script = ExtResource( 4 )
 
-[node name="XPLabel" type="Label" parent="Panel/Position2D"]
+[node name="XPLabel" type="Label" parent="LevelPanel/Position2D"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -93,7 +95,7 @@ text = "8"
 align = 1
 valign = 1
 
-[node name="LabelTween" type="Tween" parent="Panel/Position2D"]
+[node name="LabelTween" type="Tween" parent="LevelPanel/Position2D"]
 
 [node name="ObjContainer" type="TabContainer" parent="."]
 anchor_left = 1.0
@@ -110,10 +112,10 @@ position = Vector2( 521, -11 )
 [node name="FullHealthTimer" type="Timer" parent="HealthBarPosition"]
 
 [node name="BankPanel" type="Panel" parent="."]
-margin_left = 2.0
-margin_top = 504.0
-margin_right = 72.0
-margin_bottom = 527.0
+margin_top = -24.0
+margin_right = 74.0
+margin_bottom = -1.0
+script = ExtResource( 8 )
 
 [node name="Coin" type="Sprite" parent="BankPanel"]
 position = Vector2( 10, 12 )
@@ -126,12 +128,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -17.0
-margin_top = -8.5
+margin_top = -9.0
 margin_right = 32.0
-margin_bottom = 8.5
+margin_bottom = 8.0
 align = 2
 
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
 [connection signal="timeout" from="SlimeEnemyTimer" to="." method="_on_SlimeEnemyTimer_timeout"]
-[connection signal="tween_all_completed" from="Panel/Position2D/LabelTween" to="Panel" method="_on_LabelTween_tween_all_completed"]
+[connection signal="tween_all_completed" from="LevelPanel/Position2D/LabelTween" to="LevelPanel" method="_on_LabelTween_tween_all_completed"]
 [connection signal="timeout" from="HealthBarPosition/FullHealthTimer" to="HealthBarPosition" method="_on_FullHealthTimer_timeout"]

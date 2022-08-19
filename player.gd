@@ -59,6 +59,7 @@ func level_up():
 		
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	position.y = get_tree().get_root().size.y / 3
 	timer_setup("AttackTimer", idle_attack_rate)
 	timer_setup("RegenTimer", regen_rate)
 	bank = load("res://PlayerBank.tres")
