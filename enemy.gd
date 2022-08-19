@@ -10,6 +10,8 @@ signal enemy_attack
 signal enemy_death
 var is_boss
 
+var is_dead = false
+
 var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
@@ -44,14 +46,30 @@ func hit(damage, isCrit):
 	else:
 		$AnimationPlayer.play("hit")
 		
-func die():
-	emit_signal("enemy_death", xp_grant, position)
-	if is_boss:
-		emit_signal("slime_boss_died")
-
+func on_particle_finish():
 	# disable to prevent regen (_process func)
 	set_process(false)
 	get_tree().queue_delete(self)
+	
+func die():
+	is_dead = true
+	emit_signal("enemy_death", xp_grant, position)
+	if is_boss:
+		emit_signal("slime_boss_died")
+		
+	var particle_timer = Timer.new()
+	particle_timer.set_wait_time(get_node("ParticleDeath").lifetime)
+	particle_timer.set_one_shot(true)
+	particle_timer.connect("timeout", self, "on_particle_finish")
+	$Sprite.visible = false
+	$AttackTimer.stop()
+	add_child(particle_timer)
+		
+	get_node("ParticleDeath").emitting = true
+	particle_timer.start()
+	
+
+
 	
 
 # Called when the node enters the scene tree for the first time.

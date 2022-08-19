@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://enemy.gd" type="Script" id=1]
 [ext_resource path="res://Slimes/Slime_Small_Green.png" type="Texture" id=2]
@@ -82,6 +82,37 @@ tracks/0/keys = {
 
 [sub_resource type="RectangleShape2D" id=5]
 
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0, 0.00332226, 0.956811, 0.983389 )
+colors = PoolColorArray( 0.294118, 0.737255, 0.12549, 1, 0.261604, 0.567871, 0.141968, 1, 0.168627, 0.596078, 0.105882, 0, 0.168627, 0.596078, 0.105882, 0 )
+
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=10]
+flag_disable_z = true
+direction = Vector3( 1000, 0, 0 )
+spread = 137.58
+gravity = Vector3( 200, 0, 0 )
+initial_velocity = 71.25
+initial_velocity_random = 0.57
+angular_velocity = 231.72
+angular_velocity_random = 0.32
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = -37.93
+linear_accel_random = 0.65
+radial_accel = -63.22
+radial_accel_random = 0.26
+tangential_accel = 18.39
+tangential_accel_random = 0.29
+angle = 107.6
+angle_random = 0.2
+scale = 5.0
+scale_random = 0.37
+color = Color( 0.0941176, 0.764706, 0.0666667, 1 )
+color_ramp = SubResource( 9 )
+
 [node name="Enemy" type="KinematicBody2D" groups=["enemies", "slimes"]]
 position = Vector2( 882, 87 )
 script = ExtResource( 1 )
@@ -111,6 +142,15 @@ position = Vector2( 1, -1 )
 shape = SubResource( 5 )
 
 [node name="SpawnTimer" type="Timer" parent="."]
+
+[node name="ParticleDeath" type="Particles2D" parent="."]
+position = Vector2( -1, 0 )
+emitting = false
+amount = 50
+one_shot = true
+explosiveness = 1.0
+randomness = 0.72
+process_material = SubResource( 10 )
 
 [connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_Area2D_area_shape_entered"]

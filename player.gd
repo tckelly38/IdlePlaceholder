@@ -76,17 +76,25 @@ func get_total_attack_dam():
 		return [attack * crit_percent, true]
 	return [attack, false]
 	
-func give_damage():
+func give_damage(user_input = false):
 	if is_dead:
 		return
 	$AnimationPlayer.play("shoot")
 	var best_target = null
 	var enemies = get_tree().get_nodes_in_group("enemies")
+	# if user clicked, then hit target closest to mouse click
+	var shoot_location = position
+	if user_input:
+		shoot_location = get_viewport().get_mouse_position()
+		
 	for enemy in enemies:
+		if enemy.is_dead:
+			continue
 		if best_target == null:
 			best_target = enemy
-		elif (position.x + enemy.position.x) < (position.x + enemy.position.x):
+		elif (shoot_location.distance_to(enemy.position) < shoot_location.distance_to(best_target.position)):
 			best_target = enemy
+			
 	var final_attack = get_total_attack_dam()
 	if is_instance_valid(best_target):
 		best_target.hit(final_attack[0], final_attack[1])
@@ -95,7 +103,7 @@ func _input(_event):
 	if is_dead:
 		return
 	if Input.is_action_pressed("my_attack"):
-		give_damage()
+		give_damage(true)
 
 func on_take_damage(damage):
 	if is_dead:
