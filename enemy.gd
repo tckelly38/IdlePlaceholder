@@ -4,11 +4,11 @@ var hit_damage = 10
 var hit_rate = 1
 var health = 100
 var speed = 0.025
-const spawn_rate = 0.5
+const spawn_rate = 1.0
 var xp_grant = 1
 signal enemy_attack
 signal enemy_death
-var is_boss
+var is_boss = false
 
 var is_dead = false
 
@@ -54,18 +54,20 @@ func on_particle_finish():
 func die():
 	is_dead = true
 	emit_signal("enemy_death", xp_grant, position)
+	var particle_to_play = get_node("ParticleDeath")
 	if is_boss:
 		emit_signal("slime_boss_died")
+		particle_to_play = get_node("ParticleBossDeath")
 		
 	var particle_timer = Timer.new()
-	particle_timer.set_wait_time(get_node("ParticleDeath").lifetime)
+	particle_timer.set_wait_time(particle_to_play.lifetime)
 	particle_timer.set_one_shot(true)
 	particle_timer.connect("timeout", self, "on_particle_finish")
 	$Sprite.visible = false
 	$AttackTimer.stop()
 	add_child(particle_timer)
 		
-	get_node("ParticleDeath").emitting = true
+	particle_to_play.emitting = true
 	particle_timer.start()
 	
 
@@ -76,7 +78,6 @@ func die():
 func _ready():
 	$AnimationPlayer.play("idle")
 	timer_setup("AttackTimer", hit_rate)
-	is_boss = false
 	
 	var error_code = connect("enemy_attack", Player, "on_take_damage")
 	if error_code:

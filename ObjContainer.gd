@@ -2,7 +2,7 @@ extends TabContainer
 
 signal update_content
 const ObjectiveContent = preload("res://ObjectiveContent.tscn")
-const number_of_objectives = 4
+const number_of_objectives = 2
 signal final_objective_reached
 
 # Called when the node enters the scene tree for the first time.
@@ -35,6 +35,7 @@ func on_item_picked_up(item):
 	
 func on_objective_finished(_reward):
 	set_tab_disabled(current_tab, true)
+	set_tab_title(current_tab, "Done")
 	if(current_tab < number_of_objectives):
 		current_tab += 1
 		set_tab_disabled(current_tab, false)

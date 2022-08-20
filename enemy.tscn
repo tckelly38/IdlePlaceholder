@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://enemy.gd" type="Script" id=1]
 [ext_resource path="res://Slimes/Slime_Small_Green.png" type="Texture" id=2]
@@ -91,27 +91,53 @@ gradient = SubResource( 8 )
 
 [sub_resource type="ParticlesMaterial" id=10]
 flag_disable_z = true
-direction = Vector3( 1000, 0, 0 )
-spread = 137.58
-gravity = Vector3( 200, 0, 0 )
-initial_velocity = 71.25
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+gravity = Vector3( 250, 0, 0 )
+initial_velocity = 94.25
 initial_velocity_random = 0.57
-angular_velocity = 231.72
-angular_velocity_random = 0.32
+angular_velocity = 74.48
+angular_velocity_random = 0.33
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 linear_accel = -37.93
 linear_accel_random = 0.65
-radial_accel = -63.22
-radial_accel_random = 0.26
 tangential_accel = 18.39
 tangential_accel_random = 0.29
 angle = 107.6
 angle_random = 0.2
 scale = 5.0
-scale_random = 0.37
+scale_random = 0.47
 color = Color( 0.0941176, 0.764706, 0.0666667, 1 )
 color_ramp = SubResource( 9 )
+
+[sub_resource type="Gradient" id=11]
+colors = PoolColorArray( 0.266667, 0.545098, 0.156863, 1, 0.266667, 0.545098, 0.156863, 0 )
+
+[sub_resource type="GradientTexture" id=12]
+gradient = SubResource( 11 )
+
+[sub_resource type="ParticlesMaterial" id=13]
+lifetime_randomness = 0.49
+flag_disable_z = true
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 114.94
+initial_velocity_random = 0.32
+angular_velocity = -289.66
+angular_velocity_random = 0.24
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 13.79
+linear_accel_random = 0.23
+radial_accel = 17.24
+radial_accel_random = 0.27
+tangential_accel = 1.11
+tangential_accel_random = 0.36
+scale = 12.49
+color = Color( 0.266667, 0.545098, 0.156863, 1 )
+color_ramp = SubResource( 12 )
 
 [node name="Enemy" type="KinematicBody2D" groups=["enemies", "slimes"]]
 position = Vector2( 882, 87 )
@@ -151,6 +177,15 @@ one_shot = true
 explosiveness = 1.0
 randomness = 0.72
 process_material = SubResource( 10 )
+
+[node name="ParticleBossDeath" type="Particles2D" parent="."]
+emitting = false
+amount = 50
+lifetime = 5.0
+one_shot = true
+explosiveness = 1.0
+randomness = 0.22
+process_material = SubResource( 13 )
 
 [connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]
 [connection signal="area_shape_entered" from="Area2D" to="." method="_on_Area2D_area_shape_entered"]
