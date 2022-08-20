@@ -17,7 +17,7 @@ func _ready():
 			"Damage":
 				label.set("custom_colors/font_color", Color('ff6633'))
 			"Critical":
-				label.set("custom_colors/font_color", Color('cc0000'))
+				label.set("custom_colors/font_color", Color('ffff33'))
 				max_size = Vector2(2.0, 2.0)
 			"Neutral":
 				label.set("custom_colors/font_color", Color('cfab51'))
