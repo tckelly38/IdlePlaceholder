@@ -10,8 +10,17 @@ signal enemy_attack
 signal enemy_death
 var is_boss = false
 
-var is_dead = false
 
+var is_dead = false
+#death animation values
+var gravity = -14
+#death_motion = Initial velocity in whatever direction, +for initial up, - for initial down
+var death_motion = 4
+
+#works the same as above, but scale can be clamped to a min
+var scale_velocity = 0
+var scale_motion = 0
+var min_scale = 0
 var isInAttackRange= false
 
 var floating_text = preload("res://FloatingPoint.tscn")
@@ -26,11 +35,19 @@ func make_boss():
 	is_boss = true
 	
 func _physics_process(_delta):
-	if $Sprite.visible:
+	if $Sprite.visible and !is_dead:
 		if(position.x > Player.get_position().x):
 			var direction = (-Player.get_position().x)
 			var motion = direction * speed
 			position.x += motion
+	#ON DEATH WILL PLAY ANIM
+	elif $Sprite.visible && is_dead:
+		position.y -= death_motion
+		scale += Vector2(scale_motion, scale_motion)
+		if (scale.x < min_scale ):
+			scale = Vector2(min_scale, min_scale)
+		death_motion += gravity * _delta
+		scale_motion += scale_velocity * _delta
 		
 func hit(damage, isCrit):
 	health -= damage
@@ -63,10 +80,11 @@ func die():
 	particle_timer.set_wait_time(particle_to_play.lifetime)
 	particle_timer.set_one_shot(true)
 	particle_timer.connect("timeout", self, "on_particle_finish")
-	$Sprite.visible = false
+	#$Sprite.visible = false
 	$AttackTimer.stop()
 	add_child(particle_timer)
-		
+	remove_from_group("enemies")
+	
 	particle_to_play.emitting = true
 	particle_timer.start()
 	

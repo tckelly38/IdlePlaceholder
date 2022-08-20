@@ -88,8 +88,6 @@ func give_damage(user_input = false):
 		shoot_location = get_viewport().get_mouse_position()
 		
 	for enemy in enemies:
-		if enemy.is_dead:
-			continue
 		if best_target == null:
 			best_target = enemy
 		elif (shoot_location.distance_to(enemy.position) < shoot_location.distance_to(best_target.position)):
